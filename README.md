@@ -8,6 +8,12 @@ With this tool, we hope to develop and prove various fingerprintning algorithms 
 This project focuses on the development of the fingerprintning algorithm with the goal to produce a model to be used in the live feed.
 
 
+To be used as:
+    python test-fingerprint.py <finger_print_model> <cad_model>
+
+<cad_model> will default to the default model in the test/models/ folder
+
+
 ### Project Roadmap
 
 #### Part 1

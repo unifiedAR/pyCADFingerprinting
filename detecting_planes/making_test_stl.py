@@ -1,5 +1,5 @@
 import numpy as np
-import stl
+import stl as stl
 from stl import mesh
 
 def make_test_cube():
@@ -16,3 +16,9 @@ def make_test_cube():
     cube.update_normals()
 
     return cube
+
+def make_any_stl(path):
+    your_mesh = mesh.Mesh.from_file(path);
+
+    return your_mesh;
+
