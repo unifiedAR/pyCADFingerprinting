@@ -31,15 +31,10 @@ class Stl():
         len_mesh = len(mesh)
         coord_mat = np.ndarray((len_mesh, 3, 3))
         # break up facets into sets of three coordinates
-        if len(mesh) > 200:
-            modulus_num = 1
-        else:
-            modulus_num = int(len(mesh) / 200)
         for j in range(len_mesh):
-            if j % modulus_num == 0:
-                coord_mat[j][0] = mesh[j][0:3]
-                coord_mat[j][1] = mesh[j][3:6]
-                coord_mat[j][2] = mesh[j][6:9]
+            coord_mat[j][0] = mesh[j][0:3]
+            coord_mat[j][1] = mesh[j][3:6]
+            coord_mat[j][2] = mesh[j][6:9]
         self.coord_mat = coord_mat
         self.num_triangles = len(coord_mat)
         print(self.num_triangles)
@@ -105,13 +100,25 @@ class NewCompositePlanes():
         each composite plane is a list of adjacent facets that share that
         normal.
         """
-        pl = np.ndarray((11, 11, 11), dtype=np.ndarray)
+        pl = np.ndarray((11, 21, 21), dtype=np.ndarray)
+        print(self.stl_object.num_triangles)
         for i in range(self.stl_object.num_triangles):
-            print("Progress:", round(100*i/self.stl_object.num_triangles), "%", end="\r")
+            print("Progress:", round(100 * i / self.stl_object.num_triangles), "%", end="\r")
             facet = self.stl_object.coord_mat[i]
             facet_norm = self.stl_object.normal_arr[i]
+
+            # TODO:
+            #  """Currently, the method of calculating the facet norm is such that a normal vector that is parallel to
+            #  another normal vector but is the negative of that vector is not recognized as being collinear. This is
+            #  not the desired behavior and I will need to add a function that transforms all normals to the +x side
+            #  of the 3D cartesian coordinate system such that no vectors that are collinear will be regarded as
+            #  non-collinear just because they were negatively opposed. There will be a special case to handle with
+            #  vectors that have a 0 x component, in which case the coordinate system will have to be split differently
+            #  """
+
             rfn = (
-                int(10 * round(facet_norm[0], 1)), int(10 * round(facet_norm[1], 1)), int(10 * round(facet_norm[2], 1)))
+                int(10 * round(facet_norm[0], 1) + 10), int(10 * round(facet_norm[1], 1) + 10),
+                int(10 * round(facet_norm[2], 1)) + 10)
             if pl[rfn[0]][rfn[1]][rfn[2]] is not None:
                 # Check whether te facet is adjacent to any other facets in
                 # the composite plane by seeing if there are any mutual
@@ -131,13 +138,15 @@ class NewCompositePlanes():
                     c = np.ndarray((1), dtype=np.ndarray)
                     c[0] = facet
                     print(pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index], '\n\n', c)
-                    pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index] = np.concatenate((pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index], c))
+                    pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index] = np.concatenate(
+                        (pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index], c))
                 else:
                     # If the code has reached here, then there are no composite planes that the facet can be added to,
                     # so a new composite plane will be added and initialized with that facet
 
                     # Add and initialize a new comp plane
-                    pl[rfn[0]][rfn[1]][rfn[2]] = np.concatenate((pl[rfn[0]][rfn[1]][rfn[2]], np.ndarray((1), dtype=np.ndarray)))
+                    pl[rfn[0]][rfn[1]][rfn[2]] = np.concatenate(
+                        (pl[rfn[0]][rfn[1]][rfn[2]], np.ndarray((1), dtype=np.ndarray)))
                     pl[rfn[0]][rfn[1]][rfn[2]][-1] = np.ndarray((1), dtype=np.ndarray)
 
                     # Add a new facet to the comp plane
@@ -145,12 +154,11 @@ class NewCompositePlanes():
                     pl[rfn[0]][rfn[1]][rfn[2]][-1][0] = facet
 
             else:
-                print("Other")
                 # No facets have matched this normal yet
                 pl[rfn[0]][rfn[1]][rfn[2]] = np.ndarray((1), dtype=np.ndarray)  # hold the list of composite planes
                 pl[rfn[0]][rfn[1]][rfn[2]][0] = np.ndarray((1), dtype=np.ndarray)  # an array to hold the facets
                 pl[rfn[0]][rfn[1]][rfn[2]][0][0] = facet
-                self.normals_used.append((rfn[0] / 10, rfn[1] / 10, rfn[2] / 10))
+                self.normals_used.append(rfn)
         self.pl = pl
 
     def __str__(self):
