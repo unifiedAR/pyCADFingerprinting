@@ -1,10 +1,6 @@
-import stl
-from stl import mesh
 from matplotlib import pyplot
 from mpl_toolkits import mplot3d
-
 from making_test_stl import make_test_cube, make_any_stl
-import utility_funcs as uf
 from classes import Stl
 from classes import NewCompositePlanes
 
@@ -29,7 +25,8 @@ def plot_stl(item):
 
 if __name__=="__main__":
     #stl = Stl('cube', cube)
-    stl_object = Stl('our_file', make_any_stl("original2.stl"))
+    # stl_object = Stl('our_file', make_any_stl("original2.stl"))
+    stl_object = Stl('our_file', make_test_cube())
 
     plot = input("\nDisplay the stl? y/n ----> ")
     if plot == 'y' or plot == 'Y':
@@ -50,4 +47,4 @@ if __name__=="__main__":
     #     comp_planes.add_facet(stl_object.coord_mat[i], i)
 
     print("Planes calculated!")
-    print(comp_planes)
+    print(comp_planes.normals_used)
