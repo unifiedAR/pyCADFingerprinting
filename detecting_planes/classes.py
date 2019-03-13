@@ -6,7 +6,8 @@ import pickle
 from making_test_stl import make_test_cube
 import utility_funcs as uf
 
-THRESHOLD = 0.5 # threshold for difference between facet/plane normal uf.crosses
+THRESHOLD = 0.5  # threshold for difference between facet/plane normal uf.crosses
+
 
 class Stl():
     """
@@ -16,8 +17,9 @@ class Stl():
     - a array of facet normals
     - an adjacency populated with the uf.cross of adjacent facets' normals
     """
+
     def __init__(self, name='', mesh=None):
-        if mesh == None: # handling initialization case for mutable obj
+        if mesh == None:  # handling initialization case for mutable obj
             mesh = []
         self.mesh = mesh
 
@@ -27,12 +29,12 @@ class Stl():
         """
         mesh = self.mesh
         len_mesh = len(mesh)
-        coord_mat = np.ndarray((len_mesh,3,3))
+        coord_mat = np.ndarray((len_mesh, 3, 3))
         # break up facets into sets of three coordinates
         if len(mesh) > 200:
             modulus_num = 1
         else:
-            modulus_num = int(len(mesh)/200)
+            modulus_num = int(len(mesh) / 200)
         for j in range(len_mesh):
             if j % modulus_num == 0:
                 coord_mat[j][0] = mesh[j][0:3]
@@ -49,10 +51,10 @@ class Stl():
         as a tuple with three elements)
         """
         coord_mat = self.coord_mat
-        normal_arr = np.ndarray((len(coord_mat),3))
+        normal_arr = np.ndarray((len(coord_mat), 3))
         for i in range(len(coord_mat)):
             facet = coord_mat[i]
-            normal_arr[i] = uf.find_normal(facet[0],facet[1],facet[2])
+            normal_arr[i] = uf.find_normal(facet[0], facet[1], facet[2])
         self.normal_arr = normal_arr
 
     def make_adjacency_matrix(self):
@@ -63,7 +65,7 @@ class Stl():
         the uf.magnitude of the uf.cross product of the adjacent facets' normal vectors.
         """
         normal_arr = self.coord_mat
-        adj_mat = np.full((len_mesh,len_mesh),None)
+        adj_mat = np.full((len_mesh, len_mesh), None)
         # create an adjacenty matrix for the mesh object
         n = 0
         for i in range(self.num_triangles):
@@ -72,9 +74,10 @@ class Stl():
                 for j in range(self.num_triangles):
                     facet_b = self.coord_mat[j]
                     for coord2 in facet_b:
-                        if [coord1[0],coord1[1],coord1[2]] == [coord2[0],coord2[1],coord2[2]]:
-                            adj_mat[i][j] = uf.magnitude(uf.cross(uf.find_normal(normal_arr[i][0],normal_arr[i][1],normal_arr[i][2]),
-                            uf.find_normal(normal_arr[j][0],normal_arr[j][1],normal_arr[j][2])))
+                        if [coord1[0], coord1[1], coord1[2]] == [coord2[0], coord2[1], coord2[2]]:
+                            adj_mat[i][j] = uf.magnitude(
+                                uf.cross(uf.find_normal(normal_arr[i][0], normal_arr[i][1], normal_arr[i][2]),
+                                         uf.find_normal(normal_arr[j][0], normal_arr[j][1], normal_arr[j][2])))
         self.adj_mat = adj_mat
 
     def make_all(self):
@@ -89,149 +92,67 @@ class Stl():
         print('Normal Array: \n', self.normal_arr)
         print('Adjacency Matrix: \n', self.adj_mat)
 
-class CompositePlanes():
-    """
-    A composite plane is a plane that represents the plane of best fit for a
-    series of facets that are filtered prior to calculating the plane of best
-    fit to have normals nearly colinear with the plane's existing normal. Facets
-    are numpy arrays and normals are tuples of length 3.
-    """
-    def __init__(self, adj_mat=None):
-        """
-        Initialize the plane with two facets; more facets are added into the
-        composite plane after the fact.
-        """
-        self.adj_mat = adj_mat
-        # Note: it is intentional that the mutable argument is being handled
-        # this way because I want all composite planes objects to have the same
-        # adj_mat attribute.
-
-        self.all_facet_index_list = []
-        self.all_facet_list = []
-        self.plane_list = [] # [((norm),[facets],[facet_indexes]),((norm),[facets],[facet_indexes]),...]
-
-    def check_facet(self, facet, facet_index, plane_index):
-        """
-        Before a facet is added to the composite plane, it must be filtered to
-        see if its normal is colinear enough with self.norm to be considered
-        part of the same plane. Returns true if it is, and false if it isn't.
-        """
-        facet_norm = uf.find_normal(facet[0],facet[1],facet[2])
-        plane = self.plane_list[plane_index]
-        for i in range(len(plane[1])):
-            if uf.magnitude(uf.cross(facet_norm, plane[0])) < THRESHOLD:
-                for index in plane[2]:
-                    # check for adjacency
-                    if self.adj_mat[facet_index][index] != None and index != facet_index:
-                        return True
-        else:
-            return False
-
-    def update_plane_norm(self, plane_index):
-        """
-        Updates the normal vector based on the average normal vector of the
-        facets in self.facets
-        """
-        norm = (0,0,0)
-        plane = self.plane_list[plane_index]
-        for facet in plane[1]:
-            norm = norm + uf.find_normal(facet[0],facet[1],facet[2])
-        self.norm = (norm[0]/len(plane[1]),norm[1]/len(plane[1]),
-            norm[2]/len(self.all_facet_index_list))
-
-    def add_facet(self, facet, index):
-        """
-        Adds a facet to the self.facets if its normal is colinear enough, and
-        update's self.norm. Returns true if it was added and false if it wasn't.
-        The purpose of returning a true or false is that this metod can be used
-        to determine whether the facet is being used in the plane or not; the
-        code that uses this method will store the facets that have already been
-        added to planes in a dictionary, and the code will need to know whether
-        to add the facet or not.
-        """
-        flag = False
-        for i in range(len(self.plane_list)):
-            if self.check_facet(facet = facet, facet_index = index, plane_index = i):
-                # the facet is not already in the composite plane, is adjacent, to
-                # at least one other facet, and has a normal that is nearly colinear
-                # with the plane's normal
-                self.all_facet_index_list.append(index)
-                self.plane_list[i][2].append(index)
-
-                self.plane_list[i][1].append(facet)
-                self.all_facet_list.append(facet)
-                self.update_plane_norm(plane_index = i)
-                flag = True
-            else:
-                continue
-
-        if flag == False:
-            facet_norm = uf.find_normal(facet[0],facet[1],facet[2])
-            # create new plane
-            self.plane_list.append((facet_norm, [facet], [index]))
-
-            self.all_facet_index_list.append(index)
-            self.all_facet_list.append(facet)
-
-    def __str__(self):
-        rtn_text = []
-        for plane in self.plane_list:
-            norm = str(plane[0])
-            facets = ''
-            for facet in plane[1]:
-                facets = facets + str(facet)
-            rtn_text.append("Normal: {}\nFacets: {}\n\n".format(norm, facets))
-        print_text = ''
-        for plane_text in rtn_text:
-            print_text = print_text + plane_text
-        return "\n{} Planes found:\n\n".format(len(self.plane_list))+print_text
 
 class NewCompositePlanes():
     def __init__(self, stl_object):
         self.stl_object = stl_object
         self.normals_used = []
+        self.pl = np.ndarray((1), dtype=np.ndarray)
 
     def build_planes(self):
-        pl = np.ndarray((10,10,10), dtype = np.ndarray)
         """
         pl[i][j][k] contains a list of composite planes with that normal, where
         each composite plane is a list of adjacent facets that share that
         normal.
         """
+        pl = np.ndarray((11, 11, 11), dtype=np.ndarray)
         for i in range(self.stl_object.num_triangles):
-            print("Progress:", round(100*i/self.stl_object.num_triangles), "%")
+            print("Progress:", round(100*i/self.stl_object.num_triangles), "%", end="\r")
             facet = self.stl_object.coord_mat[i]
             facet_norm = self.stl_object.normal_arr[i]
-            rfn = (int(10*round(facet_norm[0],1)),int(10*round(facet_norm[1],1)),int(10*round(facet_norm[2],1)))
-            pl = np.ndarray((11,11,11),dtype=np.ndarray)
-            if pl[rfn[0]][rfn[1]][rfn[2]] != None:
-                flag = False
+            rfn = (
+                int(10 * round(facet_norm[0], 1)), int(10 * round(facet_norm[1], 1)), int(10 * round(facet_norm[2], 1)))
+            if pl[rfn[0]][rfn[1]][rfn[2]] is not None:
                 # Check whether te facet is adjacent to any other facets in
                 # the composite plane by seeing if there are any mutual
                 # points between them:
-                while True:
-                    for i in range(len(pl[rfn[0]][rfn[1]][rfn[2]])):
-                        comp_plane = pl[rfn[0]][rfn[1]][rfn[2]][i]
-                        for comp_facet in comp_plane:
-                            for facet_coord in facet:
-                                if facet_coord in comp_facet:
-                                    flag = True
-                                    comp_plane_index = i
-                                    break
-                    # If the code has reached here, then there are no mutual pts
-                    # Make a new composite plane
-                    pl[rfn[0]][rfn[1]][rfn[2]].append(facet)
-                if flag == True:
-                    # If the code has reached here, the facet should be added to
-                    # the comp_plane indexed by comp_plane_index
-                    pl[rfn[0]][rfn[1]][rfn[2]][comp_plane_index].append(facet)
+                flag = False
+                for j in range(len(pl[rfn[0]][rfn[1]][rfn[2]])):
+                    comp_plane = [pl[rfn[0]][rfn[1]][rfn[2]][j]]
+                    for comp_facet in comp_plane:
+                        for facet_coord in facet:
+                            if facet_coord in comp_facet:
+                                comp_pl_index = j
+                                flag = True
+
+                if flag:
+                    # If the code has reached here, then there are mutual pts between the facet and the composite plane
+                    # at index j
+                    c = np.ndarray((1), dtype=np.ndarray)
+                    c[0] = facet
+                    print(pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index], '\n\n', c)
+                    pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index] = np.concatenate((pl[rfn[0]][rfn[1]][rfn[2]][comp_pl_index], c))
+                else:
+                    # If the code has reached here, then there are no composite planes that the facet can be added to,
+                    # so a new composite plane will be added and initialized with that facet
+
+                    # Add and initialize a new comp plane
+                    pl[rfn[0]][rfn[1]][rfn[2]] = np.concatenate((pl[rfn[0]][rfn[1]][rfn[2]], np.ndarray((1), dtype=np.ndarray)))
+                    pl[rfn[0]][rfn[1]][rfn[2]][-1] = np.ndarray((1), dtype=np.ndarray)
+
+                    # Add a new facet to the comp plane
+                    # pl[rfn[0]][rfn[1]][rfn[2]][-1] = np.concatenate((pl[rfn[0]][rfn[1]][rfn[2]][-1], np.ndarray((1), dtype=np.ndarray)))
+                    pl[rfn[0]][rfn[1]][rfn[2]][-1][0] = facet
+
             else:
-                # There is no information for any facets that match this normal
-                pl[rfn[0]][rfn[1]][rfn[2]] = np.ndarray((1),dtype=np.ndarray)
-                print(facet)
-                pl[rfn[0]][rfn[1]][rfn[2]][0] = facet
-                self.normals_used.append((rfn[0]/10,rfn[1]/10,rfn[2]/10))
+                print("Other")
+                # No facets have matched this normal yet
+                pl[rfn[0]][rfn[1]][rfn[2]] = np.ndarray((1), dtype=np.ndarray)  # hold the list of composite planes
+                pl[rfn[0]][rfn[1]][rfn[2]][0] = np.ndarray((1), dtype=np.ndarray)  # an array to hold the facets
+                pl[rfn[0]][rfn[1]][rfn[2]][0][0] = facet
+                self.normals_used.append((rfn[0] / 10, rfn[1] / 10, rfn[2] / 10))
         self.pl = pl
+
     def __str__(self):
         print("All normals: \n", self.pl)
         print("Normals used: \n", len(self.normals_used))
