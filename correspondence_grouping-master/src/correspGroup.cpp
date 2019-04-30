@@ -21,7 +21,7 @@
 
 using namespace N;
 
-struct rotTransMats CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
+void CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
 {
     typedef pcl::PointXYZRGBA PointType;
     typedef pcl::Normal NormalType;
@@ -232,16 +232,6 @@ struct rotTransMats CorrespGroup :: find (std::string model_filename_, std::stri
         printf ("\n");
         printf ("        t = < %0.3f, %0.3f, %0.3f >\n", translation (0), translation (1), translation (2));
     }
-
-    struct rotTransMats {
-        Eigen::Matrix3f rotationMat;
-        Eigen::Vector3f translationVec;
-    } mats;
-
-    mats.rotationMat = rotation;
-    mats.translationVec = translation;
-
-    return rotTransMats;
 }
 
 //double

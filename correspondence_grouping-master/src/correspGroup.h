@@ -2,11 +2,10 @@
 // Created by duncan on 4/30/19.
 //
 
+#include <iostream>
 
 #ifndef CORRESPONSEGROUPING_CORRESPGROUP_H
 #define CORRESPONSEGROUPING_CORRESPGROUP_H
-
-#include <pcl/point_cloud.h>
 
 namespace N {
     class CorrespGroup {
