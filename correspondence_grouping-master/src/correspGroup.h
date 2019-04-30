@@ -6,11 +6,12 @@
 #ifndef CORRESPONSEGROUPING_CORRESPGROUP_H
 #define CORRESPONSEGROUPING_CORRESPGROUP_H
 
+#include <pcl/point_cloud.h>
 
 namespace N {
     class CorrespGroup {
     public:
-        struct find(model_filename_, scene_filename_);
+        void find (std::string model_filename_, std::string scene_filename_);
     };
 }
 
