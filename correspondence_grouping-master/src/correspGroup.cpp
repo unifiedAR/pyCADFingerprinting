@@ -18,6 +18,7 @@
 #include <pcl/console/parse.h>
 
 #include "correspGroup.h"
+#include <string.h>
 
 using namespace N;
 
