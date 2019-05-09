@@ -5,9 +5,12 @@ set (CMAKE_CXX_FLAGS "-std=gnu++0x")
 project(doStuff)
 target_link_libraries (doStuff ${PCL_LIBRARIES})
 
+set(MYLIB_EXPORT __declspec(dllexport))
+
 #it seems it's needed only on OS X 10.9
 #find_package(GLEW REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include -v")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 find_package(PCL 1.7 REQUIRED)
  
