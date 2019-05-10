@@ -10,7 +10,7 @@
 
 class CorrespGroup {
 public:
-    void find (std::string model_filename_, std::string scene_filename_);
+    void find (char *model_filename, char *scene_filename);
 };
 
 

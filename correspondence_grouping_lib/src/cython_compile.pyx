@@ -1,7 +1,7 @@
 from libcpp.string cimport string
 
 cdef extern from "correspGroup.h":
-    void find (std::string model_filename_, std::string scene_filename_);
+    void find (char *string model_filename, char *scene_filename);
 
 def py_hello(name: bytes) -> None:
 hello(name)
