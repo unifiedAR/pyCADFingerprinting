@@ -20,8 +20,6 @@
 #include "correspGroup.h"
 #include <string.h>
 
-using namespace N;
-
 void CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
 {
     typedef pcl::PointXYZRGBA PointType;
