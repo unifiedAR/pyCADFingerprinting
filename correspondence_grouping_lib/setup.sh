@@ -12,7 +12,7 @@ cd /home/pyCADFingerprinting/correspondence_grouping_lib;
 mkdir build;
 cd build;
 cmake ..;
-make;
+make -j8;
 mv libCorrespGroup.so ../src/
 cd ../src/;
 pip3 install cython;
