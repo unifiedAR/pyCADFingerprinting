@@ -5,7 +5,6 @@
 #include "correspGroup.h"
 
 int main () {
-    CorrespGroup model;
-    model.find('../test/milk.pcd', '../test/milk_cartoon_all_small_clorox.pcd');
+    find('../test/milk.pcd', '../test/milk_cartoon_all_small_clorox.pcd');
     return 0;
 };
