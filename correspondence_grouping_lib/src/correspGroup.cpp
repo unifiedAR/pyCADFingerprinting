@@ -23,8 +23,8 @@
 void CorrespGroup :: find (char *model_filename, char *scene_filename)
 {
     // Convert char to std::string
-    std::string model_filename_(model_filename)
-    std::string scene_filename_(scene_filename)
+    std::string model_filename_(model_filename);
+    std::string scene_filename_(scene_filename);
 
     typedef pcl::PointXYZRGBA PointType;
     typedef pcl::Normal NormalType;
