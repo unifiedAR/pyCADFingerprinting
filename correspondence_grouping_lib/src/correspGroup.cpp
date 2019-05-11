@@ -20,6 +20,37 @@
 #include "correspGroup.h"
 #include <string.h>
 
+double
+computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
+{
+    double res = 0.0;
+    int n_points = 0;
+    int nres;
+    std::vector<int> indices (2);
+    std::vector<float> sqr_distances (2);
+    pcl::search::KdTree<PointType> tree;
+    tree.setInputCloud (cloud);
+
+    for (size_t i = 0; i < cloud->size (); ++i)
+    {
+        if (! std::isfinite ((*cloud)[i].x))
+        {
+            continue;
+        }
+        //Considering the second neighbor since the first is the point itself.
+        nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
+        if (nres == 2)
+        {
+            res += sqrt (sqr_distances[1]);
+            ++n_points;
+        }
+    }
+    if (n_points != 0)
+    {
+        res /= n_points;
+    }
+    return res;
+
 void CorrespGroup :: find (char *model_filename, char *scene_filename)
 {
     // Convert char to std::string
@@ -237,34 +268,3 @@ void CorrespGroup :: find (char *model_filename, char *scene_filename)
         printf ("        t = < %0.3f, %0.3f, %0.3f >\n", translation (0), translation (1), translation (2));
     }
 }
-
-double
-computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
-{
-    double res = 0.0;
-    int n_points = 0;
-    int nres;
-    std::vector<int> indices (2);
-    std::vector<float> sqr_distances (2);
-    pcl::search::KdTree<PointType> tree;
-    tree.setInputCloud (cloud);
-
-    for (size_t i = 0; i < cloud->size (); ++i)
-    {
-        if (! std::isfinite ((*cloud)[i].x))
-        {
-            continue;
-        }
-        //Considering the second neighbor since the first is the point itself.
-        nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
-        if (nres == 2)
-        {
-            res += sqrt (sqr_distances[1]);
-            ++n_points;
-        }
-    }
-    if (n_points != 0)
-    {
-        res /= n_points;
-    }
-    return res;
