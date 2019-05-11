@@ -20,8 +20,7 @@
 #include "correspGroup.h"
 #include <string.h>
 
-//void CorrespGroup :: find (char *model_filename, char *scene_filename)
-void find (char *model_filename, char *scene_filename)
+void CorrespGroup :: find (char *model_filename, char *scene_filename)
 {
     // Convert char to std::string
     std::string model_filename_(model_filename);
@@ -71,48 +70,22 @@ void find (char *model_filename, char *scene_filename)
     //
     if (use_cloud_resolution_)
     {
-        double res = 0.0;
-        int n_points = 0;
-        int nres;
-        std::vector<int> indices (2);
-        std::vector<float> sqr_distances (2);
-        pcl::search::KdTree<PointType> tree;
-        tree.setInputCloud (cloud);
-
-        for (size_t i = 0; i < cloud->size (); ++i)
+        float resolution = static_cast<float> (computeCloudResolution (model));
+        if (resolution != 0.0f)
         {
-            if (! std::isfinite ((*cloud)[i].x))
-            {
-                continue;
-            }
-            //Considering the second neighbor since the first is the point itself.
-            nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
-            if (nres == 2)
-            {
-                res += sqrt (sqr_distances[1]);
-                ++n_points;
-            }
-        }
-        if (n_points != 0)
-        {
-            res /= n_points;
+            model_ss_   *= resolution;
+            scene_ss_   *= resolution;
+            rf_rad_     *= resolution;
+            descr_rad_  *= resolution;
+            cg_size_    *= resolution;
         }
 
-        if (res != 0.0f)
-        {
-            model_ss_   *= res;
-            scene_ss_   *= res;
-            rf_rad_     *= res;
-            descr_rad_  *= res;
-            cg_size_    *= res;
-        }
-
-//        std::cout << "Model resolution:       " << resolution << std::endl;
-//        std::cout << "Model sampling size:    " << model_ss_ << std::endl;
-//        std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
-//        std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
-//        std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
-//        std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
+        std::cout << "Model resolution:       " << resolution << std::endl;
+        std::cout << "Model sampling size:    " << model_ss_ << std::endl;
+        std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
+        std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
+        std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
+        std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
     }
 
     //
@@ -265,33 +238,33 @@ void find (char *model_filename, char *scene_filename)
     }
 }
 
-//double
-//computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
-//{
-//    double res = 0.0;
-//    int n_points = 0;
-//    int nres;
-//    std::vector<int> indices (2);
-//    std::vector<float> sqr_distances (2);
-//    pcl::search::KdTree<PointType> tree;
-//    tree.setInputCloud (cloud);
-//
-//    for (size_t i = 0; i < cloud->size (); ++i)
-//    {
-//        if (! std::isfinite ((*cloud)[i].x))
-//        {
-//            continue;
-//        }
-//        //Considering the second neighbor since the first is the point itself.
-//        nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
-//        if (nres == 2)
-//        {
-//            res += sqrt (sqr_distances[1]);
-//            ++n_points;
-//        }
-//    }
-//    if (n_points != 0)
-//    {
-//        res /= n_points;
-//    }
-//    return res;
+double
+computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
+{
+    double res = 0.0;
+    int n_points = 0;
+    int nres;
+    std::vector<int> indices (2);
+    std::vector<float> sqr_distances (2);
+    pcl::search::KdTree<PointType> tree;
+    tree.setInputCloud (cloud);
+
+    for (size_t i = 0; i < cloud->size (); ++i)
+    {
+        if (! std::isfinite ((*cloud)[i].x))
+        {
+            continue;
+        }
+        //Considering the second neighbor since the first is the point itself.
+        nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
+        if (nres == 2)
+        {
+            res += sqrt (sqr_distances[1]);
+            ++n_points;
+        }
+    }
+    if (n_points != 0)
+    {
+        res /= n_points;
+    }
+    return res;
