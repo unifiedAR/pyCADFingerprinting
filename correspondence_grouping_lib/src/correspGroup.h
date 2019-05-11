@@ -5,9 +5,11 @@
 #ifndef CORRESPONSEGROUPING_CORRESPGROUP_H
 #define CORRESPONSEGROUPING_CORRESPGROUP_H
 
+#include <string.h>
+
 class CorrespGroup {
 public:
-    void find (char *model_filename, char *scene_filename);
+    void find (std::string model_filename, std::string scene_filename);
 };
 
 #endif //CORRESPONSEGROUPING_CORRESPGROUP_H
