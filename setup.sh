@@ -18,4 +18,5 @@ cmake ..;
 make -j8;
 mv libCorrespGroup.so ../src/correspGroup
 cd ..;
+pwd
 python app.py;
