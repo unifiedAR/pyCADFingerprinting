@@ -16,6 +16,5 @@ cmake ..;
 make -j8;
 mv libCorrespGroup.so ../src/
 cd ../src/;
-pip3 install cython;
-
-python setup.py build_ext --inplace;
+pip install flask;
+python app.py;
