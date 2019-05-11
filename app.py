@@ -1,5 +1,7 @@
 from flask import Flask, request
 from flask_session import Session
+
+
 app = Flask(__name__)
 
 
@@ -34,6 +36,7 @@ class WebApplication(Flask):
 
 @app.route('/')
 def index():
+
     return 'Index page'
 
 @app.route('/stl', methods=['POST', 'GET'])

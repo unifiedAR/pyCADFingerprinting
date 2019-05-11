@@ -21,6 +21,21 @@
 
 using namespace N;
 
+
+void bar(){
+    std::cout << "Hello" << std::endl;
+}
+
+
+
+
+extern "C" {
+    Foo* Foo_new(){ return new Foo(); }
+    void Foo_bar(Foo* foo){ foo->bar(); }
+}
+
+
+
 void CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
 {
     typedef pcl::PointXYZRGBA PointType;
