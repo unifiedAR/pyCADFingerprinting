@@ -20,7 +20,7 @@
 #include "correspGroup.h"
 #include <string.h>
 
-void CorrespGroup :: find (std::string model_filename, std::string scene_filename)
+void CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
 {
 
 //    typedef pcl::PointXYZRGBA PointType;

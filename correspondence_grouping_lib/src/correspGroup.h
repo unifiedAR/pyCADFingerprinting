@@ -9,7 +9,7 @@
 
 class CorrespGroup {
 public:
-    void find (std::string model_filename, std::string scene_filename);
+    void find (std::string model_filename_, std::string scene_filename_);
 };
 
 #endif //CORRESPONSEGROUPING_CORRESPGROUP_H
