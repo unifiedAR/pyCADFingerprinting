@@ -16,5 +16,6 @@ mkdir build;
 cd build;
 cmake ..;
 make -j8;
-mv libCorrespGroup.so ../src/
+mv libCorrespGroup.so ../src/correspGroup
+cd ..;
 python app.py;

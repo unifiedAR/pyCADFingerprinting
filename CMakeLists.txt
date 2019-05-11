@@ -18,8 +18,8 @@ add_definitions(${PCL_DEFINITIONS})
 set(PCL_BUILD_TYPE Release)
  
 file(GLOB PCL_openni_viewer_SRC
-    "src/*.h"
-    "src/*.cpp"
+    "src/correspGroup/*.h"
+    "src/correspGroup/*.cpp"
 )
 
 add_library(CorrespGroup SHARED src/correspGroup.cpp)
