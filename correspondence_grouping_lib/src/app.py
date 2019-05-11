@@ -13,7 +13,6 @@ class WebApplication(Flask):
 
         # Set configuration variables
         self.debug = debug
-        self.config['SECRET_KEY'] = os.urandom(16)
         Session(self)  # for the cookies
 
     def listen(self, **options):
