@@ -96,25 +96,25 @@ void CorrespGroup :: find (char *model_filename, char *scene_filename)
 //        return res;
 //    }
 
-    if (use_cloud_resolution_)
-    {
-        float resolution = static_cast<float> (computeCloudResolution (model));
-        if (resolution != 0.0f)
-        {
-            model_ss_   *= resolution;
-            scene_ss_   *= resolution;
-            rf_rad_     *= resolution;
-            descr_rad_  *= resolution;
-            cg_size_    *= resolution;
-        }
-
-        std::cout << "Model resolution:       " << resolution << std::endl;
-        std::cout << "Model sampling size:    " << model_ss_ << std::endl;
-        std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
-        std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
-        std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
-        std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
-    }
+//    if (use_cloud_resolution_)
+//    {
+//        float resolution = static_cast<float> (computeCloudResolution (model));
+//        if (resolution != 0.0f)
+//        {
+//            model_ss_   *= resolution;
+//            scene_ss_   *= resolution;
+//            rf_rad_     *= resolution;
+//            descr_rad_  *= resolution;
+//            cg_size_    *= resolution;
+//        }
+//
+//        std::cout << "Model resolution:       " << resolution << std::endl;
+//        std::cout << "Model sampling size:    " << model_ss_ << std::endl;
+//        std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
+//        std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
+//        std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
+//        std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
+//    }
 
     //
     //  Compute Normals
