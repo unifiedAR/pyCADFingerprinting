@@ -22,7 +22,7 @@ file(GLOB PCL_openni_viewer_SRC
     "src/*.cpp"
 )
 
-add_library(CorrespGroup SHARED src/correspGroup.cpp)
+add_executable(doStuff ${PCL_openni_viewer_SRC})
 
-install(TARGETS CorrespGroup DESTINATION lib/)
-install(FILES correspGroup.h DESTINATION include/)
+#install(TARGETS CorrespGroup DESTINATION lib/)
+#install(FILES correspGroup.h DESTINATION include/)
