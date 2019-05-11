@@ -2,13 +2,6 @@
 // Created by duncan on 4/30/19.
 //
 
-
-#include <string.h>
-
-//
-// Created by duncan on 4/30/19.
-//
-
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/correspondence.h>
@@ -24,13 +17,13 @@
 #include <pcl/common/transforms.h>
 #include <pcl/console/parse.h>
 
-#include <string.h>
+#include "correspGroup.h"
 
-void find (std::string model_filename_, std::string scene_filename_)
+using namespace N;
+
+void CorrespGroup :: find (std::string model_filename_, std::string scene_filename_)
 {
-
-//    typedef pcl::PointXYZRGBA PointType;
-    typedef pcl::PointXYZ PointType;
+    typedef pcl::PointXYZRGBA PointType;
     typedef pcl::Normal NormalType;
     typedef pcl::ReferenceFrame RFType;
     typedef pcl::SHOT352 DescriptorType;
@@ -71,34 +64,6 @@ void find (std::string model_filename_, std::string scene_filename_)
     //
     //  Set up resolution invariance
     //
-//    double
-//    computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
-//    {
-//        double res = 0.0;
-//        int n_points = 0;
-//        int nres;
-//        std::vector<int> indices(2);
-//        std::vector<float> sqr_distances(2);
-//        pcl::search::KdTree <PointType> tree;
-//        tree.setInputCloud(cloud);
-//
-//        for (size_t i = 0; i < cloud->size(); ++i) {
-//            if (!std::isfinite((*cloud)[i].x)) {
-//                continue;
-//            }
-//            //Considering the second neighbor since the first is the point itself.
-//            nres = tree.nearestKSearch(i, 2, indices, sqr_distances);
-//            if (nres == 2) {
-//                res += sqrt(sqr_distances[1]);
-//                ++n_points;
-//            }
-//        }
-//        if (n_points != 0) {
-//            res /= n_points;
-//        }
-//        return res;
-//    }
-
 //    if (use_cloud_resolution_)
 //    {
 //        float resolution = static_cast<float> (computeCloudResolution (model));
@@ -269,9 +234,33 @@ void find (std::string model_filename_, std::string scene_filename_)
     }
 }
 
-
-
-int main () {
-    find("../test/milk.pcd", "../test/milk_cartoon_all_small_clorox.pcd");
-    return 0;
-};
+//double
+//CorrespGroup :: computeCloudResolution (const pcl::PointCloud<PointType>::ConstPtr &cloud)
+//{
+//    double res = 0.0;
+//    int n_points = 0;
+//    int nres;
+//    std::vector<int> indices (2);
+//    std::vector<float> sqr_distances (2);
+//    pcl::search::KdTree<PointType> tree;
+//    tree.setInputCloud (cloud);
+//
+//    for (size_t i = 0; i < cloud->size (); ++i)
+//    {
+//        if (! std::isfinite ((*cloud)[i].x))
+//        {
+//            continue;
+//        }
+//        //Considering the second neighbor since the first is the point itself.
+//        nres = tree.nearestKSearch (i, 2, indices, sqr_distances);
+//        if (nres == 2)
+//        {
+//            res += sqrt (sqr_distances[1]);
+//            ++n_points;
+//        }
+//    }
+//    if (n_points != 0)
+//    {
+//        res /= n_points;
+//    }
+//    return res;
