@@ -1,5 +1,5 @@
 from ctypes import cdll
-lib = cdll.LoadLibrary('libCorrespGroup.so')
+lib = cdll.LoadLibrary('./libCorrespGroup.so')
 
 class Foo(object):
     def __init__(self):

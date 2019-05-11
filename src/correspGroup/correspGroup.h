@@ -12,8 +12,6 @@ namespace N {
     public:
         void find (std::string model_filename_, std::string scene_filename_);
     };
-
-
 }
 
 
