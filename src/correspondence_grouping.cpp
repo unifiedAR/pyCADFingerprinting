@@ -339,7 +339,7 @@ main (int argc, char *argv[])
   //  Output results
   //
   if (rototranslations.size() != 1) {
-    printf("success=false")
+    printf("success=false");
   } else {
 
       for (size_t i = 0; i < rototranslations.size (); ++i)

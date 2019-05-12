@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_session import Session
 from src.parse_data import save_text_to_pcd
+import subprocess
 
 app = Flask(__name__)
 
@@ -39,7 +40,14 @@ def index():
 def stl():
     mesh_text = request.get_data().decode()
     save_text_to_pcd(mesh_text)
+    
     print('Scene mesh received and saved successfully!')
+
+    process = subprocess.Popen('./src/CorrespondenceGrouping test/milk.pcd test/milk_carton_all_small_clorox.pcd', stdout=subprocess.PIPE)
+    out, _ = process.communicate()
+
+    print(out)
+
     return 'none'
 
 
