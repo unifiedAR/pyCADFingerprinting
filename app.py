@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_session import Session
+from src.parse_data import save_text_to_pcd
 
 app = Flask(__name__)
 
@@ -40,14 +41,13 @@ def index():
 @app.route('/stl', methods=['POST', 'GET'])
 def stl():
     stl_data = request.get_data().decode()
-    print(stl_data)
+
     return 'none'
 
 
 @app.route('/matrix', methods=['POST', 'GET'])
 def matrix():
-    matrix_data = request.get_data().decode()
-    print(matrix_data)
+    # TODO
     return 'none'
 
 
