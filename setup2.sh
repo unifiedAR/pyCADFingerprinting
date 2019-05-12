@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#pip install --upgrade pip;
+pip install --upgrade pip;
 pip install numpy;
 pip install flask;
 pip install flask_session;
