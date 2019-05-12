@@ -5,13 +5,10 @@ from src.parse_data import save_text_to_pcd
 app = Flask(__name__)
 
 '''
-[ ] Make sure .so builds correctly
-[ ] Call .so file from python
-
-[ ] Receive point cloud data in the form of PCD
-
+[x] Make sure .so builds correctly
+[x] Call .so file from python
+[x] Receive point cloud data in the form of PCD
 [ ] Return transform in the form of a matrix/quaternion
-
 '''
 
 
@@ -40,8 +37,9 @@ def index():
 
 @app.route('/stl', methods=['POST', 'GET'])
 def stl():
-    stl_data = request.get_data().decode()
-
+    mesh_text = request.get_data().decode()
+    save_text_to_pcd(mesh_text)
+    print('Scene mesh received and saved successfully!')
     return 'none'
 
 
@@ -53,4 +51,4 @@ def matrix():
 
 if __name__ == "__main__":
     app = WebApplication("spatial_computing_lab")
-app.listen(port=8080)
+    app.listen(port=8080)
