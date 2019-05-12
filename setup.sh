@@ -9,14 +9,15 @@ pip install flask;
 pip install flask_session;
 mkdir python-virtual-environments && cd python-virtual-environments
 apt-get install python3-venv
-python3 -m venv env;
-source env/bin/activate;
+python3 -m venv env && source env/bin/activate;
+cd /home/
+git clone https://github.com/strawlab/python-pcl.git;
+cd python-pcl/;
+pip install .;
 cd /home/pyCADFingerprinting/;
 mkdir build;
 cd build;
 cmake ..;
 make -j8;
 mv libCorrespGroup.so ../src/correspGroup
-cd ..;
-pwd
-python app.py;
+cd /home/pyCADFingerrinting/
