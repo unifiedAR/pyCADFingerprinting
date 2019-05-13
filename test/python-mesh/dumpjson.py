@@ -27,7 +27,7 @@ for ltr in item:
         if(a == "rotation"):
             rotmatrix = np.fromstring(c[:-1], sep=',').reshape(3,3)
             quaternion = R.from_rotvec(rotmatrix).as_quat()
-            print(quaternion)
+           # print(quaternion)
             obj[a] = quaternion.tolist()
 
         if(a == "translation"):

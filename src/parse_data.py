@@ -33,7 +33,7 @@ def save_text_to_pcd(mesh, path='auto', file_name='scene_mesh.pcd'):
             cwd = os.path.join(cwd, 'src')
         elif cwd[len_cwd - 4:len_cwd] == '/src':
             print('In the /pyCADFingerprinting/src directory')
-        file_path = os.path.join(os.getcwd(), 'mesh_folder', file_name)
+        file_path = os.path.join(cwd, 'mesh_folder', file_name)
     else:
         file_path = os.path.join(path, file_name)
     pc = text_to_pcd(mesh)
