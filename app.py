@@ -45,12 +45,13 @@ def index():
 @app.route('/stl', methods=['POST', 'GET'])
 def stl():
     scene_mesh_text = request.get_data().decode()
+    print(scene_mesh_text)
     save_text_to_pcd(scene_mesh_text)
 
     print('Scene mesh received and saved successfully!')
 
     process = subprocess.Popen(
-        ['./src/CorrespondenceGrouping', 'src/mesh_folder/scene_mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
+        ['./src/CorrespondenceGrouping', 'src/mesh_folder/mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
         stdout=subprocess.PIPE)
     out = process.stdout.read().decode()
     print(out)

@@ -24,8 +24,8 @@ std::string scene_filename_;
 //Algorithm params
 bool show_keypoints_ (false);
 bool show_correspondences_ (false);
-bool use_cloud_resolution_ (false);
-bool use_hough_ (true);
+bool use_cloud_resolution_ (true);
+bool use_hough_ (false);
 float model_ss_ (0.01f);
 float scene_ss_ (0.03f);
 float rf_rad_ (0.015f);
@@ -173,13 +173,13 @@ main (int argc, char *argv[])
   //
   if (pcl::io::loadPCDFile (model_filename_, *model) < 0)
   {
-    // std::cout << "Error loading model cloud." << std::endl;
+    std::cout << "Error loading model cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }
   if (pcl::io::loadPCDFile (scene_filename_, *scene) < 0)
   {
-    // std::cout << "Error loading scene cloud." << std::endl;
+    std::cout << "Error loading scene cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }

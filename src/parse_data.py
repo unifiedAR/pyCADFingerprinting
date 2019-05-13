@@ -37,7 +37,7 @@ def save_text_to_pcd(mesh, path='auto', file_name='scene_mesh.pcd'):
     else:
         file_path = os.path.join(path, file_name)
     pc = text_to_pcd(mesh)
-    pcl.save(pc, file_path, format='pcd')
+    pcl.save(pc, file_path, format='pcd', binary=True)
 
 
 if __name__ == '__main__':
