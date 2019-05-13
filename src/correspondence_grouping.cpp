@@ -13,7 +13,7 @@
 #include <pcl/common/transforms.h>
 #include <pcl/console/parse.h>
 
-typedef pcl::PointXYZRGBA PointType;
+typedef pcl::PointXYZ PointType;
 typedef pcl::Normal NormalType;
 typedef pcl::ReferenceFrame RFType;
 typedef pcl::SHOT352 DescriptorType;
@@ -36,26 +36,26 @@ float cg_thresh_ (5.0f);
 void
 showHelp (char *filename)
 {
-  std::cout << std::endl;
-  std::cout << "***************************************************************************" << std::endl;
-  std::cout << "*                                                                         *" << std::endl;
-  std::cout << "*             Correspondence Grouping Tutorial - Usage Guide              *" << std::endl;
-  std::cout << "*                                                                         *" << std::endl;
-  std::cout << "***************************************************************************" << std::endl << std::endl;
-  std::cout << "Usage: " << filename << " model_filename.pcd scene_filename.pcd [Options]" << std::endl << std::endl;
-  std::cout << "Options:" << std::endl;
-  std::cout << "     -h:                     Show this help." << std::endl;
-  std::cout << "     -k:                     Show used keypoints." << std::endl;
-  std::cout << "     -c:                     Show used correspondences." << std::endl;
-  std::cout << "     -r:                     Compute the model cloud resolution and multiply" << std::endl;
-  std::cout << "                             each radius given by that value." << std::endl;
-  std::cout << "     --algorithm (Hough|GC): Clustering algorithm used (default Hough)." << std::endl;
-  std::cout << "     --model_ss val:         Model uniform sampling radius (default 0.01)" << std::endl;
-  std::cout << "     --scene_ss val:         Scene uniform sampling radius (default 0.03)" << std::endl;
-  std::cout << "     --rf_rad val:           Reference frame radius (default 0.015)" << std::endl;
-  std::cout << "     --descr_rad val:        Descriptor radius (default 0.02)" << std::endl;
-  std::cout << "     --cg_size val:          Cluster size (default 0.01)" << std::endl;
-  std::cout << "     --cg_thresh val:        Clustering threshold (default 5)" << std::endl << std::endl;
+  // std::cout << std::endl;
+  // std::cout << "***************************************************************************" << std::endl;
+  // std::cout << "*                                                                         *" << std::endl;
+  // std::cout << "*             Correspondence Grouping Tutorial - Usage Guide              *" << std::endl;
+  // std::cout << "*                                                                         *" << std::endl;
+  // std::cout << "***************************************************************************" << std::endl << std::endl;
+  // std::cout << "Usage: " << filename << " model_filename.pcd scene_filename.pcd [Options]" << std::endl << std::endl;
+  // std::cout << "Options:" << std::endl;
+  // std::cout << "     -h:                     Show this help." << std::endl;
+  // std::cout << "     -k:                     Show used keypoints." << std::endl;
+  // std::cout << "     -c:                     Show used correspondences." << std::endl;
+  // std::cout << "     -r:                     Compute the model cloud resolution and multiply" << std::endl;
+  // std::cout << "                             each radius given by that value." << std::endl;
+  // std::cout << "     --algorithm (Hough|GC): Clustering algorithm used (default Hough)." << std::endl;
+  // std::cout << "     --model_ss val:         Model uniform sampling radius (default 0.01)" << std::endl;
+  // std::cout << "     --scene_ss val:         Scene uniform sampling radius (default 0.03)" << std::endl;
+  // std::cout << "     --rf_rad val:           Reference frame radius (default 0.015)" << std::endl;
+  // std::cout << "     --descr_rad val:        Descriptor radius (default 0.02)" << std::endl;
+  // std::cout << "     --cg_size val:          Cluster size (default 0.01)" << std::endl;
+  // std::cout << "     --cg_thresh val:        Clustering threshold (default 5)" << std::endl << std::endl;
 }
 
 void
@@ -73,7 +73,7 @@ parseCommandLine (int argc, char *argv[])
   filenames = pcl::console::parse_file_extension_argument (argc, argv, ".pcd");
   if (filenames.size () != 2)
   {
-    std::cout << "Filenames missing.\n";
+    // std::cout << "Filenames missing.\n";
     showHelp (argv[0]);
     exit (-1);
   }
@@ -107,7 +107,7 @@ parseCommandLine (int argc, char *argv[])
     }
     else
     {
-      std::cout << "Wrong algorithm name.\n";
+      // std::cout << "Wrong algorithm name.\n";
       showHelp (argv[0]);
       exit (-1);
     }
@@ -173,13 +173,13 @@ main (int argc, char *argv[])
   //
   if (pcl::io::loadPCDFile (model_filename_, *model) < 0)
   {
-    std::cout << "Error loading model cloud." << std::endl;
+    // std::cout << "Error loading model cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }
   if (pcl::io::loadPCDFile (scene_filename_, *scene) < 0)
   {
-    std::cout << "Error loading scene cloud." << std::endl;
+    // std::cout << "Error loading scene cloud." << std::endl;
     showHelp (argv[0]);
     return (-1);
   }
@@ -199,12 +199,12 @@ main (int argc, char *argv[])
       cg_size_    *= resolution;
     }
 
-    std::cout << "Model resolution:       " << resolution << std::endl;
-    std::cout << "Model sampling size:    " << model_ss_ << std::endl;
-    std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
-    std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
-    std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
-    std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
+    // std::cout << "Model resolution:       " << resolution << std::endl;
+    // std::cout << "Model sampling size:    " << model_ss_ << std::endl;
+    // std::cout << "Scene sampling size:    " << scene_ss_ << std::endl;
+    // std::cout << "LRF support radius:     " << rf_rad_ << std::endl;
+    // std::cout << "SHOT descriptor radius: " << descr_rad_ << std::endl;
+    // std::cout << "Clustering bin size:    " << cg_size_ << std::endl << std::endl;
   }
 
   //
@@ -226,12 +226,12 @@ main (int argc, char *argv[])
   uniform_sampling.setInputCloud (model);
   uniform_sampling.setRadiusSearch (model_ss_);
   uniform_sampling.filter (*model_keypoints);
-  std::cout << "Model total points: " << model->size () << "; Selected Keypoints: " << model_keypoints->size () << std::endl;
+  // std::cout << "Model total points: " << model->size () << "; Selected Keypoints: " << model_keypoints->size () << std::endl;
 
   uniform_sampling.setInputCloud (scene);
   uniform_sampling.setRadiusSearch (scene_ss_);
   uniform_sampling.filter (*scene_keypoints);
-  std::cout << "Scene total points: " << scene->size () << "; Selected Keypoints: " << scene_keypoints->size () << std::endl;
+  // std::cout << "Scene total points: " << scene->size () << "; Selected Keypoints: " << scene_keypoints->size () << std::endl;
 
 
   //
@@ -274,7 +274,7 @@ main (int argc, char *argv[])
       model_scene_corrs->push_back (corr);
     }
   }
-  std::cout << "Correspondences found: " << model_scene_corrs->size () << std::endl;
+  // std::cout << "Correspondences found: " << model_scene_corrs->size () << std::endl;
 
   //
   //  Actual Clustering
