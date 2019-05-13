@@ -28,9 +28,13 @@ def cg_to_json(cg_output):
             if(a == "rotation"):
                 #print(c[:-1])
                 rotmatrix = np.fromstring(c[:-1], sep=',').reshape(3,3)
-                quaternion = R.from_rotvec(rotmatrix).as_euler('xyz')
-            # print(quaternion)
-                obj[a] = quaternion.tolist()
+                quaternion = R.from_rotvec(rotmatrix)
+                diags = np.diag(quaternion.as_euler('xyz'))
+                print(diags)
+                obj[a] = diags.tolist()
+                obj["x_rot"] = obj[a][0]
+                obj["y_rot"] = obj[a][1]
+                obj["z_rot"] = obj[a][2]
 
             if(a == "translation"):
                 obj[a] = np.fromstring(c[:-1], sep=',').tolist()
