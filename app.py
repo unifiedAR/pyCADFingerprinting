@@ -1,12 +1,12 @@
 from flask import Flask, request
 from flask_session import Session
-from src.parse_data import save_text_to_pcd
+#from src.parse_data import save_text_to_pcd
 import subprocess
 import json
 
 
 
-app = Flask(__name__)
+#app = Flask(__name__)
 
 '''
 [x] Make sure .so bui   lds correctly
@@ -29,9 +29,15 @@ class WebApplication(Flask):
         self.debug = debug
         Session(self)  # for the cookies
 
+
     def listen(self, **options):
         """ Asks Flask to begin listening to HTTP requests, with options if given. """
         self.run(options.get('host', "0.0.0.0"), options.get('port', 8081), options, use_reloader=False)
+
+
+app = WebApplication("spatial_computing_lab")
+app.listen(port=8081)
+
 
 
 @app.route('/')

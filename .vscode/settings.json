@@ -4,5 +4,6 @@
         "string": "cpp",
         "string_view": "cpp",
         "iostream": "cpp"
-    }
+    },
+    "python.pythonPath": "/Users/jonkelley/Virtualenvs/miniconda3/envs/daily/bin/python"
 }
