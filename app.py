@@ -1,12 +1,9 @@
 from flask import Flask, request
 from flask_session import Session
-#from src.parse_data import save_text_to_pcd
+from src.parse_data import save_text_to_pcd
 import subprocess
-import json
+from src.dumpjson import cg_to_json
 
-
-
-#app = Flask(__name__)
 
 '''
 [x] Make sure .so bui   lds correctly
@@ -29,7 +26,6 @@ class WebApplication(Flask):
         self.debug = debug
         Session(self)  # for the cookies
 
-
     def listen(self, **options):
         """ Asks Flask to begin listening to HTTP requests, with options if given. """
         self.run(options.get('host', "0.0.0.0"), options.get('port', 8081), options, use_reloader=False)
@@ -39,11 +35,10 @@ app = WebApplication("spatial_computing_lab")
 app.listen(port=8081)
 
 
-
 @app.route('/')
 def index():
     print('hello world')
-    #json.
+    # json.
     return 'Index page'
 
 
@@ -54,13 +49,12 @@ def stl():
 
     print('Scene mesh received and saved successfully!')
 
-    process = subprocess.Popen(['./src/CorrespondenceGrouping', 'src/mesh_folder/scene_mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
-                               stdout=subprocess.PIPE)
+    process = subprocess.Popen(
+        ['./src/CorrespondenceGrouping', 'src/mesh_folder/scene_mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
+        stdout=subprocess.PIPE)
     out = process.stdout.read().decode()
-
     print(out)
-
-    return out
+    return cg_to_json(out+";")
 
 
 if __name__ == "__main__":
