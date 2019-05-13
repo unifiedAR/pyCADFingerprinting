@@ -6,7 +6,7 @@ import subprocess
 app = Flask(__name__)
 
 '''
-[x] Make sure .so builds correctly
+[x] Make sure .so bui   lds correctly
 [x] Call .so file from python
 [x] Receive point cloud data in the form of PCD
 [ ] Return transform in the form of a matrix/quaternion
@@ -28,11 +28,12 @@ class WebApplication(Flask):
 
     def listen(self, **options):
         """ Asks Flask to begin listening to HTTP requests, with options if given. """
-        self.run(options.get('host', "0.0.0.0"), options.get('port', 3000), options, use_reloader=False)
+        self.run(options.get('host', "0.0.0.0"), options.get('port', 8081), options, use_reloader=False)
 
 
 @app.route('/')
 def index():
+    print('hello world')
     return 'Index page'
 
 
@@ -40,13 +41,13 @@ def index():
 def stl():
     mesh_text = request.get_data().decode()
     save_text_to_pcd(mesh_text)
-    
+
     print('Scene mesh received and saved successfully!')
 
-    process = subprocess.Popen('./src/CorrespondenceGrouping test/milk.pcd test/milk_carton_all_small_clorox.pcd', stdout=subprocess.PIPE)
-    out, _ = process.communicate()
-
-    print(out)
+    process = subprocess.Popen(['./src/CorrespondenceGrouping', 'src/mesh_folder/scene_mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
+                               stdout=subprocess.PIPE)
+    out = process.stdout.read()
+    print(out.decode())
 
     return 'none'
 
@@ -59,4 +60,4 @@ def matrix():
 
 if __name__ == "__main__":
     app = WebApplication("spatial_computing_lab")
-    app.listen(port=8080)
+    app.listen(port=8081)
