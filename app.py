@@ -1,9 +1,9 @@
 from flask import Flask, request
 from flask_session import Session
-from src.parse_data import save_text_to_pcd
+#from src.parse_data import save_text_to_pcd
 import subprocess
 
-app = Flask(__name__)
+#app = Flask(__name__)
 
 '''
 [x] Make sure .so builds correctly
@@ -26,9 +26,15 @@ class WebApplication(Flask):
         self.debug = debug
         Session(self)  # for the cookies
 
+
     def listen(self, **options):
         """ Asks Flask to begin listening to HTTP requests, with options if given. """
         self.run(options.get('host', "0.0.0.0"), options.get('port', 3000), options, use_reloader=False)
+
+
+app = WebApplication("spatial_computing_lab")
+app.listen(port=8081)
+
 
 
 @app.route('/')
@@ -39,7 +45,7 @@ def index():
 @app.route('/stl', methods=['POST', 'GET'])
 def stl():
     mesh_text = request.get_data().decode()
-    save_text_to_pcd(mesh_text)
+    #save_text_to_pcd(mesh_text)
     
     print('Scene mesh received and saved successfully!')
 
@@ -57,6 +63,7 @@ def matrix():
     return 'none'
 
 
-if __name__ == "__main__":
-    app = WebApplication("spatial_computing_lab")
-    app.listen(port=8080)
+
+#if __name__ == "__main__":
+
+
