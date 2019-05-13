@@ -23,21 +23,11 @@ def cg_to_json(cg_output):
             sub = cg_output[lastidx:idx]
             a, b, c, = str.partition(sub, "=")
             lastidx = idx
-<<<<<<< HEAD
             obj[a] = c[:-1].replace(" ", "")
 
             if (a == "rotation"):
                 print(c[:-1])
                 rotmatrix = np.fromstring(c[:-1], sep=',').reshape(3, 3)
-=======
-            #print(a,c[:-1])
-            obj[a] = c[:-1].replace(" ", "")
-
-
-            if(a == "rotation"):
-                #print(c[:-1])
-                rotmatrix = np.fromstring(c[:-1], sep=',').reshape(3,3)
->>>>>>> 6b401a0b05d892bc9202e2f755ac77dadbc2b067
                 quaternion = R.from_rotvec(rotmatrix).as_euler('xyz')
                 # print(quaternion)
                 obj[a] = quaternion.tolist()
