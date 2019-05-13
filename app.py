@@ -2,6 +2,9 @@ from flask import Flask, request
 from flask_session import Session
 from src.parse_data import save_text_to_pcd
 import subprocess
+import json
+
+
 
 app = Flask(__name__)
 
@@ -34,28 +37,24 @@ class WebApplication(Flask):
 @app.route('/')
 def index():
     print('hello world')
+    #json.
     return 'Index page'
 
 
 @app.route('/stl', methods=['POST', 'GET'])
 def stl():
-    mesh_text = request.get_data().decode()
-    save_text_to_pcd(mesh_text)
+    scene_mesh_text = request.get_data().decode()
+    save_text_to_pcd(scene_mesh_text)
 
     print('Scene mesh received and saved successfully!')
 
     process = subprocess.Popen(['./src/CorrespondenceGrouping', 'src/mesh_folder/scene_mesh.pcd', 'src/mesh_folder/scene_mesh.pcd'],
                                stdout=subprocess.PIPE)
-    out = process.stdout.read()
-    print(out.decode())
+    out = process.stdout.read().decode()
 
-    return 'none'
+    print(out)
 
-
-@app.route('/matrix', methods=['POST', 'GET'])
-def matrix():
-    # TODO
-    return 'none'
+    return out
 
 
 if __name__ == "__main__":
